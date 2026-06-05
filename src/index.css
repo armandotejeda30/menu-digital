@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+  --star: #fbbf24;
+  --background: #ffffff;
+  --foreground: #09090b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --card: #ffffff;
+  --destructive: #ef4444;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out forwards;
+}
