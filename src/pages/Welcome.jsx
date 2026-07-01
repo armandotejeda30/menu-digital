@@ -57,6 +57,18 @@ export default function Welcome() {
               Entrar al panel
             </button>
           </p>
+
+          <p className="text-sm text-white/70">
+            Diseñado por{" "}
+            <a 
+              href="https://www.instagram.com/lunova_mx/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="font-medium text-white underline-offset-4 hover:underline"
+            >
+              Lunova
+            </a>
+          </p>
         </div>
       </div>
     </div>
