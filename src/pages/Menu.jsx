@@ -177,9 +177,6 @@ export default function Menu() {
             <button onClick={() => navigate("/")} className="grid h-10 w-10 place-items-center rounded-full bg-white/90 shadow-md backdrop-blur-md transition active:scale-95">
               <ArrowLeft className="h-5 w-5" strokeWidth={2.2} />
             </button>
-            <button onClick={() => setLiked((v) => !v)} className="grid h-10 w-10 place-items-center rounded-full bg-white/90 shadow-md backdrop-blur-md transition active:scale-95">
-              <Heart className={`h-5 w-5 transition ${liked ? "fill-red-500 text-red-500" : ""}`} strokeWidth={2.2} />
-            </button>
           </div>
 
           {sliderImages.length > 1 && (
@@ -197,7 +194,6 @@ export default function Menu() {
           <h2 className="text-2xl font-bold tracking-tight">{config.nombre_negocio}</h2>
           
           <div className="mt-2 flex items-center gap-4 text-xs font-medium text-neutral-500">
-            <span className="flex items-center gap-1"><Star className="h-4 w-4 fill-amber-400 text-amber-400" /> 4.8</span>
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> Abierto ahora</span>
             {config.eslogan && <span className="truncate italic text-neutral-400">"{config.eslogan}"</span>}
           </div>
