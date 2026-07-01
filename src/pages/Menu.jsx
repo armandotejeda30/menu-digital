@@ -245,9 +245,7 @@ export default function Menu() {
         </div>
       </div>
 
-      {/* ========================================== */}
-      // BOTÓN FLOTANTE DEL CARRITO (FAB)
-      {/* ========================================== */}
+ 
       {cartCount > 0 && (
         <motion.button
           initial={{ scale: 0, y: 20 }}

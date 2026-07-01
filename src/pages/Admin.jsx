@@ -210,30 +210,51 @@ export default function AdminPage() {
   const openNewCat = () => { setEditingCat(null); setCatModalOpen(true); };
   const openEditCat = (c) => { setEditingCat(c); setCatModalOpen(true); };
 
-  const triggerDeleteProduct = (p) => setDeleteDialog({ isOpen: true, type: "producto", id: p.id, title: p.nombre });
+  const triggerDeleteProduct = (p) => setDeleteDialog({ isOpen: true, type: "producto", id: p.id, title: p.nombre, foto_url: p.foto_url });
   const triggerDeleteCategory = (c) => setDeleteDialog({ isOpen: true, type: "categoría", id: c.id, title: c.nombre });
-  const triggerDeleteBanner = (b, index) => setDeleteDialog({ isOpen: true, type: "banner", id: b.id, title: `Banner #${index + 1}` });
-
+  const triggerDeleteBanner = (b, index) => setDeleteDialog({ isOpen: true, type: "banner", id: b.id, title: `Banner #${index + 1}`, foto_url: b.foto_url });
+  
   const executeDelete = async () => {
     setIsDeleting(true);
     try {
+      // 1. ELIMINACIÓN DEL ARCHIVO FÍSICO EN STORAGE (Si existe foto)
+      if (deleteDialog.foto_url) {
+        // Extraemos el nombre del archivo de la URL pública (ej: "17192345.jpg")
+        const fileName = deleteDialog.foto_url.split('/').pop();
+        
+        // Verificamos que sea una imagen alojada en nuestro Supabase antes de intentar borrar
+        if (deleteDialog.foto_url.includes("supabase.co/storage")) {
+          const { error: storageError } = await supabase.storage
+            .from("imagenes-menu")
+            .remove([fileName]);
+            
+          if (storageError) {
+            console.error("Error al borrar del Storage:", storageError.message);
+            // Nota: No lanzamos throw aquí por si el archivo ya no existía en el Storage, 
+            // permitiendo que limpie el registro de la Base de Datos de todos modos.
+          }
+        }
+      }
+
+      // 2. ELIMINACIÓN DEL REGISTRO EN LA BASE DE DATOS
       if (deleteDialog.type === "producto") {
         await supabase.from("productos").delete().eq("id", deleteDialog.id);
-        toast.success("Producto eliminado");
+        toast.success("Producto e imagen eliminados por completo");
       } else if (deleteDialog.type === "categoría") {
         const { error } = await supabase.from("categorias").delete().eq("id", deleteDialog.id);
         if (error) throw new Error("La categoría tiene productos asignados.");
         toast.success("Categoría eliminada");
       } else if (deleteDialog.type === "banner") {
         await supabase.from("publicidad").delete().eq("id", deleteDialog.id);
-        toast.success("Banner eliminado");
+        toast.success("Banner e imagen eliminados por completo");
       }
-      fetchData();
+      
+      fetchData(); // Recargar el Dashboard con los datos limpios
     } catch (error) {
       toast.error(error.message || "Error al eliminar");
     } finally {
       setIsDeleting(false);
-      setDeleteDialog({ isOpen: false, type: "", id: null, title: "" });
+      setDeleteDialog({ isOpen: false, type: "", id: null, title: "", foto_url: null });
     }
   };
 
